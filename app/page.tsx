@@ -8,7 +8,8 @@ async function getContent() {
 }
 
 function unflatten(items: any) {
-  var tree = [], mappedArr = {};
+  let tree = [];
+  let mappedArr: any = [];
       
   items.forEach(function(item: any) {
     var id = item.id;
