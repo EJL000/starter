@@ -7,10 +7,10 @@ async function getContent() {
   return content
 }
 
-function unflatten(items) {
+function unflatten(items: any) {
   var tree = [], mappedArr = {};
       
-  items.forEach(function(item) {
+  items.forEach(function(item: any) {
     var id = item.id;
     if (!mappedArr.hasOwnProperty(id)) { 
       mappedArr[id] = item; 
@@ -32,14 +32,14 @@ function unflatten(items) {
     return tree;
 }
 
-var getListItems = dataset => {
-  return dataset.map(item => {
+var getListItems = (dataset: any) => {
+  return dataset.map((item: any) => {
     var nested = getTreeStrucureTemplate(item.children || [])
     return `<li>${ item.name }</li>${ nested }`
   }).join('') 
 }
 
-var getTreeStrucureTemplate = dataset => {
+var getTreeStrucureTemplate = (dataset: any) => {
   if (dataset.length) {
     return `<ul>${ getListItems(dataset) }</ul>`
   } else {
