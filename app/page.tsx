@@ -36,13 +36,17 @@ function unflatten(items: any) {
 var getListItems = (dataset: any) => {
   return dataset.map((item: any) => {
     var nested = getTreeStrucureTemplate(item.children || [])
-    return `<li>${ item.name }</li>${ nested }`
+    if(item.children.length) {
+      return `<details><summary>${ item.name }</summary>${ nested }</details>`
+    } else {
+      return `<p>${ item.name }</p>`
+    }
   }).join('') 
 }
 
 var getTreeStrucureTemplate = (dataset: any) => {
   if (dataset.length) {
-    return `<ul>${ getListItems(dataset) }</ul>`
+    return `${ getListItems(dataset) }`
   } else {
     return ''
   }
@@ -50,13 +54,18 @@ var getTreeStrucureTemplate = (dataset: any) => {
 
 export default async function Page() {
   const data = await getContent();
+  console.log(data);
   const tree = unflatten(data);
+  console.log(tree);
   let test = getTreeStrucureTemplate(tree);
+  
+  console.log(test);
 
   return (
     <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-      <h1 className="text-5x1 font-bold">Territories</h1>
-      <div dangerouslySetInnerHTML={{ __html: test }}>
+      <h1 className="font-bold">Territories</h1>
+      <h2>Here is the list of territories</h2>
+      <div dangerouslySetInnerHTML={{__html: test}}>
       </div>
     </div>
   );
