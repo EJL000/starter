@@ -1,3 +1,5 @@
+import { signOut } from '@/auth';
+
 async function getContent() {
   const response = await fetch('https://netzwelt-devtest.azurewebsites.net/Territories/All', {
     method: 'GET'
@@ -54,12 +56,8 @@ var getTreeStrucureTemplate = (dataset: any) => {
 
 export default async function Page() {
   const data = await getContent();
-  console.log(data);
   const tree = unflatten(data);
-  console.log(tree);
   let test = getTreeStrucureTemplate(tree);
-  
-  console.log(test);
 
   return (
     <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
@@ -67,6 +65,14 @@ export default async function Page() {
       <h2>Here is the list of territories</h2>
       <div dangerouslySetInnerHTML={{__html: test}}>
       </div>
+      <form action={async () => {
+            'use server';
+            await signOut();
+          }}>
+          <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
+            <div className="hidden md:block">Sign Out</div>
+          </button>
+        </form>
     </div>
   );
 }

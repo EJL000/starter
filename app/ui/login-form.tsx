@@ -3,12 +3,15 @@
 import { Inter } from 'next/font/google';
 import { Button } from './button';
 import { useFormState, useFormStatus } from 'react-dom';
+import { authenticate } from '@/app/lib/actions';
 
 const inter = Inter({subsets: ['latin'] });
 
 export default function LoginForm() {
+  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
   return (
-    <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
+    <form action={dispatch} className="space-y-3">
+      <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
       <div className="w-full">
         <h1 className={`${inter.className} mb-3 text-2xl`}> Please login to continue. </h1>
       </div>
@@ -18,6 +21,7 @@ export default function LoginForm() {
           className="block rounded-md w-full border py-[9px] pl-1"
           id="username" 
           type="text" 
+          name="username"
           placeholder="Enter Username" 
           required/>
       </div>
@@ -27,11 +31,24 @@ export default function LoginForm() {
           className="block rounded-md w-full border py-[9px] pl-1"
           id="password" 
           type="password" 
+          name="password"
           placeholder="Enter Password" 
           required/>
       </div>
       <LoginButton />
+      <div
+        className="flex h-8 items-end space-x-1"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {errorMessage && (
+          <>
+            <p className="text-sm text-red-500">{errorMessage}</p>
+          </>
+        )}
+      </div>
     </div>
+    </form>
   );
 }
 
@@ -42,20 +59,4 @@ function LoginButton() {
       Login
     </Button>
   );
-}
-
-async function getLogIn() {
-  const response = await fetch('https://netzwelt-devtest.azurewebsites.net/Account/SignIn', {
-    method: 'POST',
-    headers: {
-        'accept': 'text/plain',
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        'username': 'string',
-        'password': 'string'
-    })
-  });
-  const login = await response.json();
-  return login
 }
